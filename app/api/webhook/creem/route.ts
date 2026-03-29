@@ -64,15 +64,23 @@ export async function POST(request: NextRequest) {
           checkoutId: event.id,
           customerId: event.object.customer.id,
           productId: event.object.product.id,
+          billingType: event.object.order.type,
         });
 
-        // Insert one-time purchase into orders table
-        await db.insert(orderTable).values({
-          customerId: event.object.customer.id,
-          productId: event.object.product.id,
-          amount: event.object.product.price,
-          status: "completed",
-        });
+        // Only insert into orders table for ONE-TIME purchases
+        // Skip subscriptions as they're handled by subscription lifecycle events
+        if (event.object.order.type === "onetime") {
+          await db.insert(orderTable).values({
+            customerId: event.object.customer.id,
+            productId: event.object.product.id,
+            amount: event.object.product.price,
+            status: "completed",
+          });
+        } else {
+          console.log(
+            "Skipping order creation for recurring product. Waiting for subscription events.",
+          );
+        }
         break;
 
       // SUBSCRIPTION: New subscription started

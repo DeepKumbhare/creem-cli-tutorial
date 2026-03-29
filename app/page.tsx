@@ -40,7 +40,7 @@ export default function Home() {
 
         <div>
           <h2 className="mt-6 text-2xl text-gray-700 dark:text-gray-300">
-            Image Generator SaaS - 29$/month
+            Image Generator SaaS - 12$/month
           </h2>
           <CreemCheckout
             productId="prod_5PrU9h573ROasTsHXQkGTN"
