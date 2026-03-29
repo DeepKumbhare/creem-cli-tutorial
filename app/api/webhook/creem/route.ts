@@ -86,29 +86,75 @@ export async function POST(request: NextRequest) {
       // SUBSCRIPTION: New subscription started
       case "subscription.active":
         console.log("Subscription active:", event.object.id);
-        await db.insert(subscriptionTable).values({
-          customerId: event.object.customer.id,
-          productId: event.object.product.id,
-          creemSubscriptionId: event.object.id,
-          status: "active",
-          currentPeriodStart: parseDate(event.object.currentPeriodStart),
-          currentPeriodEnd: parseDate(event.object.currentPeriodEnd),
-          autoRenew: event.object.autoRenew ?? true,
-        });
+
+        // Check if subscription exists
+        const existingActive = await db
+          .select()
+          .from(subscriptionTable)
+          .where(eq(subscriptionTable.creemSubscriptionId, event.object.id))
+          .limit(1);
+
+        if (existingActive.length > 0) {
+          // Update existing subscription
+          await db
+            .update(subscriptionTable)
+            .set({
+              status: "active",
+              currentPeriodStart: parseDate(event.object.currentPeriodStart),
+              currentPeriodEnd: parseDate(event.object.currentPeriodEnd),
+              autoRenew: event.object.autoRenew ?? true,
+              updatedAt: new Date(),
+            })
+            .where(eq(subscriptionTable.creemSubscriptionId, event.object.id));
+        } else {
+          // Create new subscription if not exists
+          await db.insert(subscriptionTable).values({
+            customerId: event.object.customer.id,
+            productId: event.object.product.id,
+            creemSubscriptionId: event.object.id,
+            status: "active",
+            currentPeriodStart: parseDate(event.object.currentPeriodStart),
+            currentPeriodEnd: parseDate(event.object.currentPeriodEnd),
+            autoRenew: event.object.autoRenew ?? true,
+          });
+        }
         break;
 
       // SUBSCRIPTION: Trial started
       case "subscription.trialing":
         console.log("Subscription trialing:", event.object.id);
-        await db.insert(subscriptionTable).values({
-          customerId: event.object.customer.id,
-          productId: event.object.product.id,
-          creemSubscriptionId: event.object.id,
-          status: "trialing",
-          currentPeriodStart: parseDate(event.object.currentPeriodStart),
-          currentPeriodEnd: parseDate(event.object.currentPeriodEnd),
-          autoRenew: event.object.autoRenew ?? true,
-        });
+
+        // Check if subscription exists
+        const existingTrialing = await db
+          .select()
+          .from(subscriptionTable)
+          .where(eq(subscriptionTable.creemSubscriptionId, event.object.id))
+          .limit(1);
+
+        if (existingTrialing.length > 0) {
+          // Update existing subscription
+          await db
+            .update(subscriptionTable)
+            .set({
+              status: "trialing",
+              currentPeriodStart: parseDate(event.object.currentPeriodStart),
+              currentPeriodEnd: parseDate(event.object.currentPeriodEnd),
+              autoRenew: event.object.autoRenew ?? true,
+              updatedAt: new Date(),
+            })
+            .where(eq(subscriptionTable.creemSubscriptionId, event.object.id));
+        } else {
+          // Create new subscription if not exists
+          await db.insert(subscriptionTable).values({
+            customerId: event.object.customer.id,
+            productId: event.object.product.id,
+            creemSubscriptionId: event.object.id,
+            status: "trialing",
+            currentPeriodStart: parseDate(event.object.currentPeriodStart),
+            currentPeriodEnd: parseDate(event.object.currentPeriodEnd),
+            autoRenew: event.object.autoRenew ?? true,
+          });
+        }
         break;
 
       // SUBSCRIPTION: Recurring payment collected

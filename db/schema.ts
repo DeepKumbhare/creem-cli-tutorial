@@ -18,7 +18,7 @@ export const subscriptionTable = pgTable("subscription", {
   id: integer().primaryKey().generatedAlwaysAsIdentity(),
   customerId: varchar({ length: 255 }).notNull(),
   productId: varchar({ length: 255 }).notNull(),
-  creemSubscriptionId: varchar({ length: 255 }).unique(),
+  creemSubscriptionId: varchar({ length: 255 }),
   status: varchar({ length: 50 }).notNull(), // active, cancelled, paused, expired
   currentPeriodStart: timestamp().notNull(),
   currentPeriodEnd: timestamp().notNull(),

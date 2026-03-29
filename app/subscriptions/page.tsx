@@ -60,10 +60,14 @@ export default function SubscriptionsPage() {
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
-    return date.toLocaleDateString("en-US", {
+    return date.toLocaleString("en-US", {
       year: "numeric",
       month: "short",
       day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+      hour12: true,
     });
   };
 
@@ -139,6 +143,9 @@ export default function SubscriptionsPage() {
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 dark:text-gray-300 uppercase tracking-wider">
                       Created
                     </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 dark:text-gray-300 uppercase tracking-wider">
+                      Updated
+                    </th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200 dark:divide-zinc-800">
@@ -148,7 +155,9 @@ export default function SubscriptionsPage() {
                       className="hover:bg-gray-50 dark:hover:bg-zinc-800 transition-colors"
                     >
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
-                        #{subscription.id}
+                        <code className="bg-gray-100 dark:bg-zinc-800 px-2 py-1 rounded text-xs">
+                          {subscription.creemSubscriptionId}
+                        </code>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-400">
                         <code className="bg-gray-100 dark:bg-zinc-800 px-2 py-1 rounded text-xs">
@@ -174,6 +183,9 @@ export default function SubscriptionsPage() {
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-400">
                         {formatDate(subscription.createdAt)}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-400">
+                        {formatDate(subscription.updatedAt)}
                       </td>
                     </tr>
                   ))}
