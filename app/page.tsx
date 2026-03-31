@@ -2,7 +2,7 @@ import { CreemCheckout } from "@creem_io/nextjs";
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900">
+    <div className="min-h-screen bg-linear-to-br from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900">
       <div className="min-h-screen flex flex-col">
         {/* Header */}
         <header className="border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950">
